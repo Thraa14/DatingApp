@@ -15,7 +15,7 @@ namespace API.Helpers
         {
             CreateMap<AppUser, MemberDTO>()
             .ForMember(dest => dest.photoUrl, opt => opt.MapFrom
-            (scr => scr.Photos.FirstOrDefault(x => !x.IsMain).Url))
+            (scr => scr.Photos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(scr => scr.DateOfBirth.CalculateAge()));
             CreateMap<Photo, PhotoDTO>();
         }
