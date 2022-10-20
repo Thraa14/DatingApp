@@ -17,7 +17,6 @@
             <li class="nav-item">
               <a class="nav-link" routerLink="/errors" routerLinkActive="active">Error</a>
             </li>
-
           </ul>
   
           <div class="dropdown" *ngIf="(accountservice.currentUser$ |async) as user" dropdown>
@@ -25,7 +24,7 @@
               Welcome {{user.username | titlecase}}
             </a>
             <div class="dropdown-menu mt-3"  *dropdownMenu>
-              <a class="dropdown-item"> Edit Profile </a>
+              <a class="dropdown-item" routerLink="/member/edit"> Edit Profile </a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" (click)="logOut()"> Logout </a>
             </div>
