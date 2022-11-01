@@ -1,19 +1,35 @@
-<form #registerForm="ngForm" (ngSubmit)="Register()" autocomplete="off">
+<form [formGroup]="RegisterForm"  (ngSubmit)=" RegisterForm.valid && Register()" autocomplete="off">
     <h2 class="text-center text-primary">
         Sign Up
     </h2>
-
     <div class="form-group">
-        <input type="text" class="form-control" name="username" 
-        [(ngModel)]="model.username" placeholder="Username">
-
-        <input type="password" class="form-control" name="password"
-        [(ngModel)]="model.password" placeholder="password">
-        
+        <label class="control-label" style="margin-right: 10px;" > Gender: </label>
+        <label class="radio-inline">
+            <input type="radio" value="male" formControlName="gender"> Male
+        </label>
+        <label class="radio-inline">
+            <input type="radio" value="female" formControlName="gender" class="ml-3"> Female
+        </label>
     </div>
+    <app-text-input [formControl]='RegisterForm.controls["username"]' [label]='"Username"'></app-text-input>
+    <app-text-input [formControl]='RegisterForm.controls["password"]' [label]='"password"' [type]='"password"'></app-text-input>
+    <app-text-input [formControl]='RegisterForm.controls["confirmPassword"]' [label]='"Confrim Password"' [type]='"password"'></app-text-input>
+    <app-text-input [formControl]='RegisterForm.controls["knownAs"]' [label]='"Known As"'></app-text-input>
+    <app-text-input [formControl]='RegisterForm.controls["city"]' [label]='"City"'></app-text-input>
+    <app-text-input [formControl]='RegisterForm.controls["country"]' [label]='"Country"'></app-text-input>
+    <app-date-input [formControl]='RegisterForm.controls["dateOfBirth"]' [label]='"Date Of Birth"' [maxDate]="maxDate"></app-date-input>  
 
+
+    <div class="row" *ngIf="validationErrors.length > 0">
+        <ul class="text-danger">
+            <li *ngFor="let error of ValidationError">
+                {{ error}}
+            </li>
+        </ul>
+    </div>
+    
     <div class="form-group text-center">
-        <button class="btn btn-success mr-2" type="submit">
+        <button [disabled]="!RegisterForm.valid" class="btn btn-success mr-2" type="submit">
             Register
         </button>
 

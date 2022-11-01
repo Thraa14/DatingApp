@@ -39,9 +39,8 @@ namespace API.Services
 
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }
-
+            
             return uploadResult;
-
         }
 
         public async Task<DeletionResult> DeletePhotoAsync(string publicID)

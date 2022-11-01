@@ -9,6 +9,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,9 +20,12 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
-        public AccountController(DataContext context, ITokenService tokenService)
+        private readonly IMapper _mapper;
+
+        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
         {
             _tokenService = tokenService;
+            _mapper = mapper;
             _context = context;
 
         }
@@ -32,19 +36,21 @@ namespace API.Controllers
 
             if (await UserExists(registerDTO.Username)) return BadRequest("UserName is Taken");
 
-            using var hmac = new HMACSHA512();
-            var user = new AppUser{
-                UserName = registerDTO.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                PasswordSalt = hmac.Key
-            };
+            var user = _mapper.Map<AppUser>(registerDTO);
 
+            using var hmac = new HMACSHA512();
+
+            user.UserName = registerDTO.Username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+            user.PasswordSalt = hmac.Key;
+            
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return new UserDTO{
                 Username = user.UserName,
-                Token =_tokenService.CreateToken(user)
+                Token =_tokenService.CreateToken(user),
+                KnownAs = user.KnownAs
             }; 
 
         }
