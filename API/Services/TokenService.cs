@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +19,9 @@ namespace API.Services
         public string CreateToken(AppUser user)
         {
             var Claims = new List<Claim> {
-                new Claim (JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim (JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim (JwtRegisteredClaimNames.UniqueName, user.UserName)
+
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

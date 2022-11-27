@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extentions;
@@ -13,8 +6,6 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
@@ -42,7 +33,7 @@ namespace API.Controllers
             }
 
             var users = await _userRepository.GetMembersASync(userParams);
-            Response.AddingPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPage);
+            Response.AddingPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(users);
         }
 
@@ -67,6 +58,7 @@ namespace API.Controllers
             return BadRequest("Failed to Update User!");
         }
 
+        [Authorize]
         [HttpPost("add-photo")]
          public async Task<ActionResult<PhotoDTO>> UploadPhoto(IFormFile file)
         {
@@ -115,7 +107,7 @@ namespace API.Controllers
             if(await _userRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Failed To set Main photo");
-         }
+        }
 
 
          [HttpDelete("delete-photo/{photoId}")]

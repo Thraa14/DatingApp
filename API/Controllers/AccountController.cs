@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -12,7 +7,6 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
@@ -81,6 +75,7 @@ namespace API.Controllers
                 Username = User.UserName,
                 Token =_tokenService.CreateToken(User),
                 PhotoUrl= User.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                KnownAs = User.KnownAs,
                 Gender = User.Gender
             }; 
         }

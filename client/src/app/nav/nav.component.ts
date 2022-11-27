@@ -12,7 +12,6 @@ import { AccountService } from '../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model : any = {}
-
   constructor(public accountservice: AccountService,
     private router: Router, 
     private toastr: ToastrService) { }
@@ -25,10 +24,6 @@ export class NavComponent implements OnInit {
     .subscribe( response => {
      this.router.navigateByUrl('/members');
     }
-    // , error => {
-    //   console.log(error);
-    //   this.toastr.error(error.error);
-    // }
     );
   }
 

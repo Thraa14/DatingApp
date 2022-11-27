@@ -22,6 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       ( error => 
         {
           if(error){
+            error.statusText = error.error.message;
             switch(error.status){
               case 400:
                 if(error.error.errors){

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Helpers
 {
@@ -12,7 +8,7 @@ namespace API.Helpers
 
         private int _pageSize = 10;
 
-        public int pageSize
+        public int PageSize
         {
             get => _pageSize;
             set => _pageSize = (value > maxPageSize) ? maxPageSize : value ;
@@ -24,7 +20,9 @@ namespace API.Helpers
 
         public int MinAge { get; set; } = 18;
 
-        public int MaxAge { get; set; } = 80;
+        public int MaxAge { get; set; } = 100;
+
+        public string OrderBy { get; set; } = "LastActive";
 
     }
 }
