@@ -33,7 +33,7 @@ namespace API.Controllers
             }
 
             var users = await _userRepository.GetMembersASync(userParams);
-            Response.AddingPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
+            Response.AddingPaginationHeader( new PaginataionHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
             return Ok(users);
         }
 
