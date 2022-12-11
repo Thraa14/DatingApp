@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Member } from 'src/app/_models/members';
 import { Pagination } from 'src/app/_models/Pagination';
@@ -14,12 +14,12 @@ import { MembersService } from 'src/app/_services/members.service';
 })
 
 export class MemberListComponent implements OnInit {
-  members : Member[];
-  pagination : Pagination;
-  userParams : UserParams;
-  genderList = [ {value: 'male', display: 'Males'}, {value: 'female', display: 'Females'} ];
+  members: Member[];
+  pagination: Pagination ;
+  userParams: UserParams;
+  genderList = [{ value: 'male', display: 'Males' }, { value: 'female', display: 'Females' }];
 
-  constructor(private memberservice : MembersService) { 
+  constructor(private memberservice: MembersService) {
     this.userParams = this.memberservice.GetUserParams();
   }
 
@@ -27,30 +27,29 @@ export class MemberListComponent implements OnInit {
     this.loadMembers();
   }
 
-  loadMembers(){
-    if(this.userParams){
+  loadMembers() {
+    if (this.userParams) {
       this.memberservice.SetUserParams(this.userParams);
-      this.memberservice.GetMembers(this.userParams).subscribe( response => {
+      this.memberservice.GetMembers(this.userParams).subscribe(response => {
         this.members = response.result;
         this.pagination = response.pagination;
+        // this.pagination = { currentPage: 1, totalItems: 50, itemsPerPage: 10, totalPages: 5 };
       })
     }
   }
 
-  resetFilters(){
+  resetFilters() {
     this.userParams = this.memberservice.ResetUserParams();
     this.loadMembers();
   }
 
 
-  pageChanged(event: any)
-  {
-    if(this.userParams && this.userParams?.pageNumber !== event.page)
-    {
+  pageChanged(event: any) {
+    if (this.userParams && this.userParams?.pageNumber !== event.page) {
       this.userParams.pageNumber = event.page;
       this.memberservice.SetUserParams(this.userParams);
       this.loadMembers();
     }
   }
- 
+
 }

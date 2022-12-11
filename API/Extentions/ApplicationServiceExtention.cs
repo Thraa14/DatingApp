@@ -23,6 +23,7 @@ namespace API.Extentions{
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         services.AddScoped<ILikesRepository, LikesRepository>();
+        services.AddScoped<IMessagesRepository, MessageRepository>();
 
         services.AddDbContext<DataContext>(options => {
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));

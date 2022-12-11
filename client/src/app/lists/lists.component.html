@@ -25,14 +25,14 @@
 
     <pagination
         [boundaryLinks]="true" 
-        [TotalItems]="pagination.TotalItems"
-        [ItemsPerPage]="pagination.ItemsPerPage"
-        [maxSize]="10"
+        [totalItems]="pagination?.TotalItems"
         [(ngModel)]="pagination.CurrentPage"
+        [itemsPerPage]="5"
         (pageChanged)="pageChanged($event)"
         previousText="&lsaquo;"
         nextText="&rsaquo;" 
         firstText="&laquo;" 
         lastText="&raquo;">
     </pagination>
+
 </div>
