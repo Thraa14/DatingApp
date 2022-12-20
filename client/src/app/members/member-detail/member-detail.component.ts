@@ -13,8 +13,8 @@ import { MessageService } from 'src/app/_services/message.service';
   styleUrls: ['./member-detail.component.css']
 })
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs?: TabsetComponent; 
-  member: Member;
+  @ViewChild('memberTabs', {static: true}) memberTabs?: TabsetComponent; 
+  member: Member = {} as Member;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
   activeTab?:TabDirective;
@@ -23,7 +23,16 @@ export class MemberDetailComponent implements OnInit {
   constructor(private memberService: MembersService, private route: ActivatedRoute, private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.loadMembers();
+    this.route.data.subscribe({
+      next: data => this.member = data['Member']
+    });
+
+    this.route.queryParams.subscribe({
+      next: params => {
+        params['tab'] && this.SelectTab(params['tabs']);
+      }
+    });
+
     this.galleryOptions =
     [{
       width: '500px',
@@ -32,8 +41,9 @@ export class MemberDetailComponent implements OnInit {
       thumbnailsColumns: 4 ,
       imageAnimation: NgxGalleryAnimation.Slide,
       preview: false,
-
     }];
+
+    this.galleryImages= this.GetImages();
   }
 
   GetImages(): NgxGalleryImage[]{
@@ -50,16 +60,6 @@ export class MemberDetailComponent implements OnInit {
     return imageUrls;
   }
 
-  loadMembers(){
-    this.memberService.GetMember(this.route.snapshot.paramMap.get('username'))
-    .subscribe(member => {
-      this.member = member;
-      this.galleryImages= this.GetImages();
-    })
-
-  }
-
-
   LoadMessages(){
     if(this.member){
       this.messageService.GetMessagesThread(this.member.userName).subscribe(
@@ -68,13 +68,18 @@ export class MemberDetailComponent implements OnInit {
         }
       );
     }
-
   }
 
   OnTabActivated(data: TabDirective){
     this.activeTab = data;
     if(this.activeTab.heading === 'Messages'){
       this.LoadMessages();
+    }
+  }
+
+  SelectTab(heading: string){
+    if(this.memberTabs){
+    this.memberTabs.tabs.find(x => x.heading === heading)!.active = true;
     }
   }
 }
