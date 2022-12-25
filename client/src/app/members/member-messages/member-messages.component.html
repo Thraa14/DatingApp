@@ -9,18 +9,20 @@
                 <div>
                     <span class="chat-img float-end">
                         <img class="rounded-circle"
-                         src="message.senderPhotoUrl || './assets/user.png" 
+                         src="{{message.senderPhotoUrl || './assets/user.png'}}" 
                          alt="Image of user">
                     </span>
                     <div class="chat-body">
                         <div class="header">
                             <small class="text-muted">
-                                <span class="fa fa-clock-o"> {{ message.messageSent | timeago}} </span>
-                                <span class="text-danger" *ngIf="!message.dataRead && message.senderUsername !== username">
+                                <span class="fa fa-clock-o"> {{ message.messageSent + 'Z' | timeago}} </span>
+                                <span class="text-danger" 
+                                    *ngIf="!message.dataRead && message.senderUsername !== username">
                                     (Unread)
                                 </span>
-                                <span class="text-success" *ngIf="message.dataRead && message.senderUsername !== username">
-                                    (Read {{message.dataRead | timeago }})
+                                <span class="text-success" 
+                                    *ngIf="message.dataRead && message.senderUsername !== username">
+                                    (Read {{message.dataRead + 'Z' | timeago }})
                                 </span>
                             </small>
                         </div>
@@ -32,11 +34,21 @@
     </div>
 
     <div class="card-footer">
-        <form>
+        <form #messageForm="ngForm" (ngSubmit)="SendMessage()" autocomplete="off">
             <div class="input-group">
-                <input type="text" class="form-control input-sm" placeholder="Send a private message">
+                <input type="text"
+                 name="messageContent"
+                 required
+                 [(ngModel)]="messageContent"
+                 class="form-control input-sm"
+                 placeholder="Send a private message">
+
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit"> Send </button>
+                    <button class="btn btn-primary" 
+                        type="submit"
+                        [disabled]="!messageForm.valid">
+                        Send 
+                    </button>
                 </div>
             </div>
         </form>

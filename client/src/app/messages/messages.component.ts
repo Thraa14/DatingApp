@@ -14,6 +14,7 @@ export class MessagesComponent implements OnInit {
   container: "Unread";
   pageNumber = 1;
   pageSize = 5;
+  loading= false;
 
   constructor( private messageService: MessageService) { }
 
@@ -22,10 +23,12 @@ export class MessagesComponent implements OnInit {
   }
 
   LoadMessages(){
+    this.loading = true;
     this.messageService.GetMessages(this.pageNumber, this.pageSize, this.container).subscribe({
       next: respone => {
         this.messages = respone.result;
         this.pagination = respone.pagination;
+        this.loading = false;
       }
     });
   }
@@ -34,6 +37,14 @@ export class MessagesComponent implements OnInit {
     if(this.pageNumber !== event.page){
       this.pageNumber = event.page;
     }
+  }
+
+
+  DeleteMessage(id : number)
+  {
+    this.messageService.DeleteMessage(id).subscribe({
+      next: () => this.messages?.splice(this.messages.findIndex(m => m.id === id.toString()), 1)
+    })
   }
 
 }
